@@ -1,0 +1,74 @@
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.title("curb-65 评分计算器 v1.0")
+
+data_in = tk.LabelFrame(root,text = "数据输入区",width=250,height = 200,padx = 20,pady = 20)
+data_in.grid(column = 0,row =0)
+data_in.grid_propagate(0)    ##  使用grid布局时，加这句才能使width生效
+
+data_out = tk.LabelFrame(root,text = "结果显示区",width=200,height = 200,padx = 20,pady = 20)
+data_out.grid(column = 1,row = 0)
+data_out.grid_propagate(0)
+
+c = tk.IntVar()
+check_c = tk.Checkbutton(data_in,text = "(C)意识障碍",variable=c)
+check_c.grid(column = 0,row=0,sticky=tk.W)
+
+u = tk.IntVar()
+check_u = tk.Checkbutton(data_in,text = "(U)血尿素氮大于7mmol/L",variable=u)
+check_u.grid(column = 0,row=1,sticky=tk.W)
+
+r = tk.IntVar()
+check_r = tk.Checkbutton(data_in,text = "(R)呼吸频率大于等于30次/分",variable=r)
+check_r.grid(column = 0,row=2,sticky=tk.W)
+
+b = tk.IntVar()
+check_b = tk.Checkbutton(data_in,text = "(B)收缩压小于90或舒张压小于等于60",variable=b)
+check_b.grid(column = 0,row=3,sticky=tk.W)
+
+a = tk.IntVar()
+check_a = tk.Checkbutton(data_in,text = "(65)年龄大于等于65岁",variable=a)
+check_a.grid(column = 0,row=4,sticky=tk.W)
+
+"""
+得分计算函数
+"""
+def curb65():
+    num = c.get()+u.get()+r.get()+b.get()+a.get()
+    score.configure(text = "curb_65得分为"+str(num))
+    if num == 0:
+        death_rate.configure(text ="预计死亡率0.6%")
+        note.configure(text ="低危，院外治疗")
+    elif num == 1:
+        death_rate.configure(text ="预计死亡率2.7%")
+        note.configure(text ="低危，院外治疗")
+    elif num == 2:
+        death_rate.configure(text ="预计死亡率6.8%")
+        note.configure(text ="短期住院或密切观察下院外治疗")
+    elif num == 3:
+        death_rate.configure(text ="预计死亡率14%")
+        note.configure(text ="重症肺炎，住院或ICU治疗")
+    else:
+        death_rate.configure(text ="预计死亡率27.8%")
+        note.configure(text ="重症肺炎，住院或ICU治疗")
+    
+    
+done = ttk.Button(data_out,text="计算",command = curb65)  
+done.grid(column=0, row=0,sticky=tk.W)
+
+score = ttk.Label(data_out,text = "      ")
+score.grid(column = 0,row = 1,sticky=tk.W)
+
+death_rate = ttk.Label(data_out,text = "       ")
+death_rate.grid(column = 0,row = 2,sticky=tk.W)
+
+note = ttk.Label(data_out,text = "       ")
+note.grid(column = 0,row = 3,sticky=tk.W)
+
+signature = ttk.Label(root,text = "郭师傅制造 2020年8月23日")
+signature.grid(column=1,row = 1,sticky = tk.N)
+
+root.resizable(0,0)
+root.mainloop()
